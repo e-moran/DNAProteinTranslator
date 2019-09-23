@@ -1,9 +1,7 @@
 package week1;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class LukesProgram {
 
@@ -11,89 +9,31 @@ public class LukesProgram {
         new DNAInfo();
     }
 
+    private String applyMap(HashMap<Character, String> map, String in) {
+        StringBuilder out = new StringBuilder(in);
+
+        for(int i=0; i<out.length(); i++) {
+            if(map.containsKey(out.charAt(i))) {
+                out.replace(i, i+1, map.get(out.charAt(i)));
+            }
+        }
+
+        return out.toString();
+    }
+
     public String dnaToMRNA(String dna) {
-        String rna = dna;
-
-        rna = rna.replace("A", "U");
-        rna = rna.replace("T", "A");
-
-        for(int i=0; i<rna.length(); i++) {
-            if(rna.charAt(i) == 'C') {
-                rna = rna.substring(0, i) + 'G' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == 'G') {
-                rna = rna.substring(0, i) + 'C' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == '5') {
-                rna = rna.substring(0, i) + '3' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == '3') {
-                rna = rna.substring(0, i) + '5' + rna.substring(i + 1, rna.length());
-            }
-        }
-
-        return rna;
+        return applyMap(DNAToMRNAMap(), dna);
     }
 
-    public String mrnaToTRNA(String dna) {
-        String rna = dna;
-
-        for(int i=0; i<rna.length(); i++) {
-            if(rna.charAt(i) == 'C') {
-                rna = rna.substring(0, i) + 'G' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == 'G') {
-                rna = rna.substring(0, i) + 'C' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == '5') {
-                rna = rna.substring(0, i) + '3' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == '3') {
-                rna = rna.substring(0, i) + '5' + rna.substring(i + 1, rna.length());
-            }  else if(rna.charAt(i) == 'U') {
-                rna = rna.substring(0, i) + 'A' + rna.substring(i + 1, rna.length());
-            }  else if(rna.charAt(i) == 'A') {
-                rna = rna.substring(0, i) + 'U' + rna.substring(i + 1, rna.length());
-            }
-        }
-
-        return rna;
+    public String mrnaToTRNA(String rna) {
+        return applyMap(mRNAToTRNAMap(), rna);
     }
 
-    public String mRNAToDNA(String dna) {
-        String rna = dna;
-
-        rna = rna.replace("A", "T");
-        rna = rna.replace("U", "A");
-
-        for(int i=0; i<rna.length(); i++) {
-            if(rna.charAt(i) == 'C') {
-                rna = rna.substring(0, i) + 'G' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == 'G') {
-                rna = rna.substring(0, i) + 'C' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == '5') {
-                rna = rna.substring(0, i) + '3' + rna.substring(i + 1, rna.length());
-            } else if(rna.charAt(i) == '3') {
-                rna = rna.substring(0, i) + '5' + rna.substring(i + 1, rna.length());
-            }
-        }
-
-        return rna;
+    public String mRNAToDNA(String rna) {
+        return applyMap(mRNAToDNAMap(), rna);
     }
 
     public String replaceAminos(String seq) {
-        /*String aminos = seq;
-        Map<String, String> map = generateAminoMap();
-
-        if(seq.length()%3 != 0)
-            return "Sequence is not a multiple of 3";
-
-        for(int i=0; i<aminos.length()/3+1; i++) {
-            int seqStart = i*3-1;
-            int seqEnd = seqStart+4;
-            System.out.println(aminos.substring(i == 0 ? 0 : seqStart, seqEnd) + " " + seqStart + seqEnd);
-            String replaceWith = map.get(i == 0 ? 0 : aminos.substring(seqStart, seqEnd));
-
-            if(seqEnd < aminos.length())    aminos = aminos.substring(0, seqStart+1) + replaceWith + aminos.substring(seqEnd + 1);
-            else aminos = aminos.substring(0, seqStart) + replaceWith;
-        }
-
-        return aminos;*/
-
         StringBuilder aminos = new StringBuilder(seq);
         Map<String, String> map = generateAminoMap();
 
@@ -104,8 +44,46 @@ public class LukesProgram {
         return aminos.toString();
     }
 
-    public HashMap<String, String> generateAminoMap() {
-        HashMap<String, String> map = new HashMap<String, String>();
+    private HashMap<Character, String> mRNAToTRNAMap() {
+        HashMap<Character, String> map = baseDNAMRNA();
+
+        map.put('U', "A");
+        map.put('A', "U");
+
+        return map;
+    }
+
+    private HashMap<Character, String> DNAToMRNAMap() {
+        HashMap<Character, String> map = baseDNAMRNA();
+
+        map.put('T', "A");
+        map.put('A', "U");
+
+        return map;
+    }
+
+    private HashMap<Character, String> mRNAToDNAMap() {
+        HashMap<Character, String> map = baseDNAMRNA();
+
+        map.put('A', "T");
+        map.put('U', "A");
+
+        return map;
+    }
+
+    private HashMap<Character, String> baseDNAMRNA() {
+        HashMap<Character, String> map = new HashMap<>();
+
+        map.put('C', "G");
+        map.put('G', "C");
+        map.put('5', "3");
+        map.put('3', "5");
+
+        return map;
+    }
+
+    private HashMap<String, String> generateAminoMap() {
+        HashMap<String, String> map = new HashMap<>();
 
         map.put("UUU","Phe");
         map.put("UUC","Phe");
@@ -123,7 +101,7 @@ public class LukesProgram {
         map.put("GUC","Val");
         map.put("GUA","Val");
         map.put("GUG","Val");
-        map.put("ACU","Ser");
+        map.put("UCU","Ser");
         map.put("UCC","Ser");
         map.put("UCA","Ser");
         map.put("UCG","Ser");
