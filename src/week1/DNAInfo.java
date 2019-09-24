@@ -23,7 +23,11 @@ public class DNAInfo {
             } else if(mRNAToDNARadioButton.isSelected()) {
                 output.setText(new LukesProgram().mRNAToDNA(input.getText()));
             } else if(aminosRadioButton.isSelected()) {
-                output.setText(new LukesProgram().replaceAminos(input.getText()));
+                if(input.getText().length() % 3 == 0) {
+                    output.setText(new LukesProgram().replaceAminos(input.getText()));
+                } else {
+                    output.setText("Input invalid length");
+                }
             } else {
                 output.setText("No conversion selected");
             }
