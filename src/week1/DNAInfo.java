@@ -15,18 +15,17 @@ public class DNAInfo {
         frame.pack();
         frame.setVisible(true);
 
-        convertButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if(DNAToMRNARadioButton.isSelected()) {
-                    output.setText(new LukesProgram().dnaToMRNA(input.getText()));
-                } else if(mRNAToTRNARadioButton.isSelected()) {
-                    output.setText(new LukesProgram().mrnaToTRNA(input.getText()));
-                } else if(mRNAToDNARadioButton.isSelected()) {
-                    output.setText(new LukesProgram().mRNAToDNA(input.getText()));
-                } else if(aminosRadioButton.isSelected()) {
-                    output.setText(new LukesProgram().replaceAminos(input.getText()));
-                }
+        convertButton.addActionListener(actionEvent -> {
+            if(DNAToMRNARadioButton.isSelected()) {
+                output.setText(new LukesProgram().dnaToMRNA(input.getText()));
+            } else if(mRNAToTRNARadioButton.isSelected()) {
+                output.setText(new LukesProgram().mrnaToTRNA(input.getText()));
+            } else if(mRNAToDNARadioButton.isSelected()) {
+                output.setText(new LukesProgram().mRNAToDNA(input.getText()));
+            } else if(aminosRadioButton.isSelected()) {
+                output.setText(new LukesProgram().replaceAminos(input.getText()));
+            } else {
+                output.setText("No conversion selected");
             }
         });
     }
