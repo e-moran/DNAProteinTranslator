@@ -34,11 +34,11 @@ public class LukesProgram {
     }
 
     public String replaceAminos(String seq) {
-        StringBuilder aminos = new StringBuilder(seq);
+        StringBuilder aminos = new StringBuilder();
         Map<String, String> map = generateAminoMap();
 
-        for(int i=0; i<aminos.length()/3; i++) {
-            aminos.replace(i*3, i*3+3, map.get(aminos.substring(i*3, i*3+3)));
+        for(int i=0; i<seq.length()/3; i++) {
+            aminos.append(map.get(seq.substring(i*3, i*3+3)));
         }
 
         return aminos.toString();
